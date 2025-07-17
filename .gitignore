@@ -1,0 +1,55 @@
+# Dependencias de Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Archivos de entorno (sensibles)
+.env
+.env.*
+!.env.example
+!env-examples/
+
+# Logs
+logs
+*.log
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+*.tmp
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos de build
+.next/
+out/
+dist/
+build/
+
+# Prisma
+backend/prisma/migrations/
+*.db
+*.db-journal
+
+# Archivos temporales
+*.tmp*
+temp/
+temporary/
+
+# Uploads (archivos subidos por usuarios)
+backend/uploads/
+!backend/uploads/.gitkeep
+
+# Cache
+.cache/
+.eslintcache
+
+# Coverage
+coverage/
+*.lcov
