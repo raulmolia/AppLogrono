@@ -1,28 +1,21 @@
 {
   "name": "app-logrono",
   "version": "1.0.0",
-  "description": "Sistema de Gestión Logroño - Sistema integral de gestión educativa",
+  "description": "Aplicación integral de gestión para Escolapios Logroño",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently --kill-others-on-fail \"node backend/index.js\" \"npm run dev --prefix frontend/my-frontend\" --delay 3000",
     "setup:offline": "node setup-offline.js",
-    "setup:production": "node setup-production.js", 
+    "setup:production": "node setup-production.js",
     "save": "node save-and-sync.js",
     "sync": "node save-and-sync.js",
     "dev:mock": "concurrently --kill-others-on-fail \"node backend/mock-server.js\" \"npm run dev --prefix frontend/my-frontend\" --delay 3000",
     "dev:production": "concurrently --kill-others-on-fail \"node backend/index.js\" \"npm run dev --prefix frontend/my-frontend\" --delay 3000"
   },
-  "keywords": [
-    "gestión-educativa",
-    "escolapios",
-    "next.js",
-    "express",
-    "prisma",
-    "sql-server"
-  ],
-  "author": "Escolapios Logroño",
-  "license": "MIT",
+  "keywords": ["nodejs", "express", "nextjs", "typescript", "prisma", "education", "management"],
+  "author": "Raúl Molia",
+  "license": "ISC",
   "repository": {
     "type": "git",
     "url": "https://github.com/raulmolia/AppLogrono.git"
