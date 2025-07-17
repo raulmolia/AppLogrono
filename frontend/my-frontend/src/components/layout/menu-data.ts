@@ -1,0 +1,116 @@
+export const menuItems = [
+  {
+    title: "Personas",
+    children: [
+      { title: "Personas", href: "/personas" },
+      { title: "Gestión alumnos", href: "/personas/alumnos" },
+      { title: "Gestión responsables", href: "/personas/responsables" },
+      { title: "Gestión familias", href: "/personas/familias" },
+      { title: "Gestión Servicios Sociales", href: "/personas/servicios-sociales" },
+      { title: "Contactos", href: "/personas/contactos" },
+    ],
+  },
+  {
+    title: "Servicios",
+    children: [
+      { title: "Comedor", href: "/servicios/comedor" },
+      { title: "Madrugadores", href: "/servicios/madrugadores" },
+      { title: "Extraescolares", href: "/servicios/extraescolares" },
+      { title: "Act. Culturales", href: "/servicios/act-culturales" },
+      { title: "One to One", href: "/servicios/one-to-one" },
+      { title: "Bachillerato Dual", href: "/servicios/bachillerato-dual" },
+      { title: "Guardería", href: "/servicios/guarderia" },
+      { title: "Seguros", href: "/servicios/seguros" },
+      { title: "Gratuidad Libros", href: "/servicios/gratuidad-libros" },
+    ],
+  },
+  {
+    title: "Ventas",
+    children: [
+      { title: "Venta Libros", href: "/ventas/venta-libros" },
+      { title: "Venta Ropa deportiva", href: "/ventas/venta-ropa-deportiva" },
+      { title: "Gestión ventas", href: "/ventas/gestion-ventas" },
+      { title: "Productos", href: "/ventas/productos" },
+      { title: "Prestashop", href: "/ventas/prestashop" },
+    ],
+  },
+  {
+    title: "Compras",
+    children: [
+      { title: "Compras", href: "/compras/compras" },
+      { title: "Gastos", href: "/compras/gastos" },
+      { title: "Proveedores", href: "/compras/proveedores" },
+      { title: "Acreedores", href: "/compras/acreedores" },
+    ],
+  },
+  {
+    title: "Financiera",
+    children: [
+      { title: "Recibos", href: "/financiera/recibos" },
+      { title: "Cobros", href: "/financiera/cobros" },
+      { title: "Presupuestos", href: "/financiera/presupuestos" },
+      { title: "Pagos", href: "/financiera/pagos" },
+      { title: "Caja", href: "/financiera/caja" },
+      { title: "Banco", href: "/financiera/banco" },
+      { title: "Contable", href: "/financiera/contable" },
+      { title: "Consultas", href: "/financiera/consultas" },
+      { title: "Informes", href: "/financiera/informes" },
+      { title: "Estadísticas", href: "/financiera/estadisticas" },
+    ],
+  },
+  {
+    title: "RRHH",
+    children: [
+      { title: "Empleados", href: "/rrhh/empleados" },
+      { title: "Formaciones", href: "/rrhh/formaciones" },
+      { title: "Bajas médicas", href: "/rrhh/bajas-medicas" },
+      { title: "Mutua y seguros", href: "/rrhh/mutua-y-seguros" },
+    ],
+  },
+  {
+    title: "Académica",
+    children: [
+      { title: "Asignaturas", href: "/academica/asignaturas" },
+      { title: "Etapas, Ciclos y Clases", href: "/academica/etapas-ciclos-y-clases" },
+      { title: "Coordinadores y Responsables", href: "/curso/25-26/coordinadores-y-responsables" },
+      { title: "Asignaciones Docentes", href: "/curso/25-26/asignaciones" },
+      { title: "Incidencias", href: "/curso/25-26/incidencias" },
+      { title: "Franjas Horarias", href: "/curso/25-26/franjas-horarias" },
+      { title: "Horarios", href: "/academica/horarios" },
+      { title: "Asignaciones empleados", href: "/academica/asignaciones-empleados" },
+      { title: "Orientación", href: "/departamentos/orientacion" },
+      { title: "Calidad", href: "/departamentos/calidad" },
+      { title: "Secretaría", href: "/departamentos/secretaria" },
+      { title: "Comunicación", href: "/departamentos/comunicacion" },
+    ],
+  },
+  {
+    title: "Edificio",
+    children: [
+      { title: "Gestión de Espacios", href: "/edificio/gestion-de-espacios" },
+      { title: "Reserva espacios", href: "/edificio/reserva-espacios" },
+      { title: "Mantenimiento", href: "/edificio/mantenimiento" },
+      { title: "Evacuación", href: "/edificio/evacuacion" },
+      { title: "Alquiler de espacios", href: "/edificio/alquiler-de-espacios" },
+    ],
+  },
+  {
+    title: "CRM",
+    children: [
+      { title: "Dashboard", href: "/crm/dashboard" },
+      { title: "Potenciales", href: "/crm/potenciales" },
+      { title: "Registros", href: "/crm/registros" },
+      { title: "Períodos", href: "/crm/periodos" },
+      { title: "Tareas y agenda", href: "/crm/tareas-y-agenda" },
+      { title: "Mediciones", href: "/crm/mediciones" },
+    ],
+  },
+  {
+    title: "Plataforma",
+    children: [
+      { title: "Usuarios", href: "/plataforma/usuarios" },
+      { title: "Bases de datos", href: "/plataforma/bases-de-datos" },
+      { title: "Administración documentos", href: "/gestion-documental/administracion-documentos" },
+    ],
+  },
+]; 
