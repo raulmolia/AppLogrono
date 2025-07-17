@@ -1,29 +1,58 @@
 {
-  "name": "app-logrono",
+  "name": "applogronowithconfiguration",
   "version": "1.0.0",
-  "description": "Aplicación integral de gestión para Escolapios Logroño",
+  "description": "Sistema de Gestión Integral para Escolapios Logroño",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently --kill-others-on-fail \"node backend/index.js\" \"npm run dev --prefix frontend/my-frontend\" --delay 3000",
-    "setup:offline": "node setup-offline.js",
-    "setup:production": "node setup-production.js",
-    "save": "node save-and-sync.js",
-    "sync": "node save-and-sync.js",
-    "dev:mock": "concurrently --kill-others-on-fail \"node backend/mock-server.js\" \"npm run dev --prefix frontend/my-frontend\" --delay 3000",
-    "dev:production": "concurrently --kill-others-on-fail \"node backend/index.js\" \"npm run dev --prefix frontend/my-frontend\" --delay 3000"
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && node index.js",
+    "dev:frontend": "cd frontend/my-frontend && npm run dev",
+    "dev:mock": "concurrently \"npm run dev:backend:mock\" \"npm run dev:frontend:mock\"",
+    "dev:backend:mock": "cd backend && NODE_ENV=mock MOCK_MODE=true node mock-server.js",
+    "dev:frontend:mock": "cd frontend/my-frontend && NEXT_PUBLIC_BACKEND_URL=http://localhost:3007 NEXT_PUBLIC_APP_MODE=mock npm run dev",
+    "build": "npm run build:frontend",
+    "build:frontend": "cd frontend/my-frontend && npm run build",
+    "start": "npm run start:backend",
+    "start:backend": "cd backend && NODE_ENV=production node index.js",
+    "start:frontend": "cd frontend/my-frontend && npm run start",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend/my-frontend && npm install",
+    "clean": "npm run clean:frontend && npm run clean:backend",
+    "clean:frontend": "cd frontend/my-frontend && rm -rf .next node_modules package-lock.json",
+    "clean:backend": "cd backend && rm -rf node_modules package-lock.json",
+    "db:generate": "cd backend && npx prisma generate",
+    "db:push": "cd backend && npx prisma db push",
+    "db:studio": "cd backend && npx prisma studio",
+    "db:seed": "cd backend && node prisma/seed-auth-simple.js",
+    "test:auth": "cd backend && node test-auth.js",
+    "test:personas": "cd backend && node test-personas.js",
+    "test:academica": "cd backend && node test-academica.js",
+    "lint": "cd frontend/my-frontend && npm run lint",
+    "format": "cd frontend/my-frontend && npx prettier --write ."
   },
-  "keywords": ["nodejs", "express", "nextjs", "typescript", "prisma", "education", "management"],
-  "author": "Raúl Molia",
+  "keywords": [
+    "nextjs",
+    "express",
+    "prisma",
+    "typescript",
+    "education",
+    "management",
+    "escolapios"
+  ],
+  "author": "Raúl Molia <raul.molia@escolapioslogrono.es>",
   "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/raulmolia/AppLogrono.git"
   },
-  "devDependencies": {
-    "concurrently": "^8.2.2"
+  "bugs": {
+    "url": "https://github.com/raulmolia/AppLogrono/issues"
   },
-  "dependencies": {
-    "@tanstack/match-sorter-utils": "^8.19.4"
-  }
+  "homepage": "https://github.com/raulmolia/AppLogrono#readme"
 }
