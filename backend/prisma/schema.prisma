@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model FacturasPrestashop {
+  IdFra             String                     @id @map("IdFra")
+  FechaFra          DateTime                   @map("FechaFra")
+  NumFra            String                     @map("NumFra")
+  Cliente           String                     @map("Cliente")
+  Alumno            String?                    @map("Alumno")
+  BIFra             Float                      @map("BIFra")
+  TotalIvaFra       Float                      @map("TotalIvaFra")
+  TotalDescuentoFra Float?                     @map("TotalDescuentoFra")
+  TotalFra          Float                      @map("TotalFra")
+  FechaCreacion     DateTime                   @default(now()) @map("FechaCreacion")
+  Curso             String?                    @map("Curso")
+  Lineas            FacturasPrestashopLineas[]
+
+  @@map("FacturasPrestashop")
+}
+
+model FacturasPrestashopLineas {
+  ID              Int                @id @default(autoincrement()) @map("ID")
+  IdFra           String             @map("IdFra")
+  Concepto        String             @map("Concepto")
+  Tipo            String             @map("Tipo")
+  BaseImponible   Float              @map("BaseImponible")
+  TasaImpuesto    Float              @map("TasaImpuesto")
+  ImporteImpuesto Float              @map("ImporteImpuesto")
+  ImporteTotal    Float              @map("ImporteTotal")
+  Factura         FacturasPrestashop @relation(fields: [IdFra], references: [IdFra])
+
+  @@map("FacturasPrestashopLineas")
+}

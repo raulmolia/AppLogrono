@@ -1,0 +1,214 @@
+// Schema de Prisma para el Módulo Autenticación Basado en Sesiones
+// Sistema Gestión Logroño - Base de datos: AuthLogronoApp
+// Completamente independiente - Sin OAuth, solo sesiones locales
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/auth-client"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("AUTH_DATABASE_URL")
+}
+
+// Usuarios del sistema
+model usuarios {
+  id                    Int      @id @default(autoincrement())
+  username              String   @unique @db.VarChar(100)
+  email                 String   @unique @db.VarChar(255)
+  password_hash         String   @db.VarChar(255)
+  nombre                String   @db.VarChar(100)
+  apellidos             String?  @db.VarChar(200)
+  avatar_url            String?  @db.VarChar(500)
+  activo                Boolean  @default(true)
+  ultimo_acceso         DateTime?
+  fecha_creacion        DateTime @default(now())
+  fecha_modificacion    DateTime @default(now()) @updatedAt
+  created_by            Int?
+  modified_by           Int?
+  
+  // Relaciones
+  sesiones              sesiones[]
+  logs_cambios          logs_cambios[]
+  usuarios_roles        usuarios_roles[]
+  creador_usuarios      usuarios[] @relation("UsuarioCreador")
+  modificador_usuarios  usuarios[] @relation("UsuarioModificador")
+  profesores_asignaciones profesores_asignaciones[]
+  acceso_contextual     acceso_contextual[]
+  configuracion_auth    configuracion_auth[]
+  
+  // Relaciones con usuario creador/modificador
+  usuario_creador       usuarios? @relation("UsuarioCreador", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usuario_modificador   usuarios? @relation("UsuarioModificador", fields: [modified_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("usuarios")
+}
+
+// Roles del sistema
+model roles {
+  id                Int      @id @default(autoincrement())
+  nombre            String   @unique @db.VarChar(50)
+  descripcion       String?  @db.VarChar(255)
+  nivel_jerarquia   Int      @default(0)
+  activo            Boolean  @default(true)
+  fecha_creacion    DateTime @default(now())
+  
+  // Relaciones
+  roles_permisos    roles_permisos[]
+  usuarios_roles    usuarios_roles[]
+
+  @@map("roles")
+}
+
+// Permisos del sistema
+model permisos {
+  id            Int      @id @default(autoincrement())
+  recurso       String   @db.VarChar(100) // 'prestashop', 'personas', 'academica', 'plataforma'
+  accion        String   @db.VarChar(50)  // 'create', 'read', 'update', 'delete', 'export', 'admin'
+  descripcion   String?  @db.VarChar(255)
+  activo        Boolean  @default(true)
+  
+  // Relaciones
+  roles_permisos roles_permisos[]
+
+  @@map("permisos")
+}
+
+// Relación roles-permisos
+model roles_permisos {
+  id                Int      @id @default(autoincrement())
+  rol_id            Int
+  permiso_id        Int
+  concedido         Boolean  @default(true)
+  fecha_asignacion  DateTime @default(now())
+  asignado_por      Int?
+  
+  // Relaciones
+  rol               roles    @relation(fields: [rol_id], references: [id], onDelete: Cascade)
+  permiso           permisos @relation(fields: [permiso_id], references: [id], onDelete: Cascade)
+
+  @@unique([rol_id, permiso_id])
+  @@map("roles_permisos")
+}
+
+// Asignación usuarios-roles
+model usuarios_roles {
+  id                Int      @id @default(autoincrement())
+  usuario_id        Int
+  rol_id            Int
+  fecha_asignacion  DateTime @default(now())
+  fecha_expiracion  DateTime?
+  activo            Boolean  @default(true)
+  asignado_por      Int?
+  
+  // Relaciones
+  usuario           usuarios @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  rol               roles    @relation(fields: [rol_id], references: [id], onDelete: Cascade)
+
+  @@unique([usuario_id, rol_id])
+  @@map("usuarios_roles")
+}
+
+// Sesiones activas
+model sesiones {
+  id                Int      @id @default(autoincrement())
+  usuario_id        Int
+  session_token     String   @unique @db.VarChar(255)
+  refresh_token     String?  @db.VarChar(255)
+  ip_address        String?  @db.VarChar(45)
+  user_agent        String?  @db.VarChar(500)
+  ubicacion         String?  @db.VarChar(255)
+  fecha_inicio      DateTime @default(now())
+  fecha_expiracion  DateTime
+  ultima_actividad  DateTime @default(now())
+  activa            Boolean  @default(true)
+  
+  // Relaciones
+  usuario           usuarios @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+
+  @@map("sesiones")
+}
+
+// Logs de cambios (auditoría)
+model logs_cambios {
+  id              Int      @id @default(autoincrement())
+  usuario_id      Int?
+  accion          String   @db.VarChar(100)
+  tabla           String?  @db.VarChar(100)
+  registro_id     Int?
+  datos_antes     String?  @db.NVarChar(Max)
+  datos_despues   String?  @db.NVarChar(Max)
+  ip_address      String?  @db.VarChar(45)
+  user_agent      String?  @db.VarChar(500)
+  fecha_cambio    DateTime @default(now())
+  modulo          String?  @db.VarChar(50)
+  
+  // Relaciones
+  usuario         usuarios? @relation(fields: [usuario_id], references: [id], onDelete: SetNull)
+
+  @@map("logs_cambios")
+}
+
+// Asignaciones profesor-clase (autorización contextual)
+model profesores_asignaciones {
+  id                Int      @id @default(autoincrement())
+  profesor_id       Int
+  clase_id          Int
+  asignatura_id     Int
+  curso_academico   String   @db.VarChar(10)
+  fecha_inicio      DateTime @db.Date
+  fecha_fin         DateTime? @db.Date
+  activo            Boolean  @default(true)
+  created_at        DateTime @default(now())
+  updated_at        DateTime @default(now()) @updatedAt
+  
+  // Relaciones
+  profesor          usuarios @relation(fields: [profesor_id], references: [id], onDelete: Cascade)
+
+  @@map("profesores_asignaciones")
+}
+
+// Cache de acceso contextual
+model acceso_contextual {
+  id                Int      @id @default(autoincrement())
+  profesor_id       Int
+  alumno_id         Int
+  clase_id          Int
+  curso_academico   String   @db.VarChar(10)
+  puede_acceder     Boolean  @default(true)
+  fecha_cache       DateTime @default(now())
+  
+  // Relaciones
+  profesor          usuarios @relation(fields: [profesor_id], references: [id], onDelete: Cascade)
+
+  @@map("acceso_contextual")
+}
+
+// Intentos de acceso fallidos
+model intentos_acceso {
+  id              Int      @id @default(autoincrement())
+  username        String?  @db.VarChar(100)
+  ip_address      String?  @db.VarChar(45)
+  user_agent      String?  @db.VarChar(500)
+  fecha_intento   DateTime @default(now())
+  motivo_fallo    String?  @db.VarChar(255)
+  bloqueado       Boolean  @default(false)
+
+  @@map("intentos_acceso")
+}
+
+// Configuración del sistema
+model configuracion_auth {
+  id                    Int      @id @default(autoincrement())
+  clave                 String   @unique @db.VarChar(100)
+  valor                 String?  @db.VarChar(500)
+  descripcion           String?  @db.VarChar(255)
+  modificado_por        Int?
+  fecha_modificacion    DateTime @default(now())
+  
+  // Relaciones
+  usuario_modificador   usuarios? @relation(fields: [modificado_por], references: [id], onDelete: SetNull)
+
+  @@map("configuracion_auth")
+}
